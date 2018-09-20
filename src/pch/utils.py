@@ -17,6 +17,34 @@ def cmd_output(*cmd, **kwargs):
     return stdout
 
 
+def is_release(prefix='release'):
+    try:
+        branch = get_current_branch()
+    except subprocess.CalledProcessError:
+        return False
+    chunks = branch.strip().split('/')
+    return prefix in chunks
+
+
+def get_release():
+    try:
+        branch = get_current_branch()
+    except subprocess.CalledProcessError:
+        return False
+    chunks = branch.strip().split('/')
+    return chunks[-1]
+
+
+
+def get_current_branch():
+    try:
+        branch = cmd_output('git', 'symbolic-ref', 'HEAD')
+    except subprocess.CalledProcessError:
+        return False
+    chunks = branch.strip().split('/')
+    return '/'.join(chunks[2:])
+
+
 class RexList(list):
     """
         list class where each entry is a valid regular expression

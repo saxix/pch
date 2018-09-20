@@ -24,6 +24,7 @@ setup(
             'check-missed-migrations = pch.check_missed_migrations:check_missed_migrations',
             'check-untracked = pch.check_untracked:check_untracked',
             'check-env-template = pch.check_env_template:check_env_template',
+            'check-version-release-match = pch.check_version_release_match:check_version_release_match',
         ],
     },
 )

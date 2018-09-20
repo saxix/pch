@@ -28,3 +28,11 @@
     language: python
     pass_filenames: false
     always_run: true
+
+-   id: check-version-release-match
+    name: check-version-release-match
+    description: check release branch name matches package version (git-flow)
+    entry: check-version-release-match
+    language: python
+    pass_filenames: false
+    always_run: true
