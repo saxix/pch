@@ -1,5 +1,4 @@
 import argparse
-import os
 from pathlib import Path
 
 from .utils import RexList
@@ -19,7 +18,7 @@ def get_keys(text, ignored):
     return set(map(split, sorted(filter(is_valid, lines))))
 
 
-def main(argv=None):
+def check_env_template(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*', help="")
     parser.add_argument('-e', '--envfile', default='.env', help=".env file to check")
@@ -48,3 +47,7 @@ def main(argv=None):
         return 1
 
     return 0
+
+
+if __name__ == '__main__':
+    exit(check_env_template())

@@ -4,7 +4,7 @@ import os
 from .utils import cmd_output
 
 
-def main(argv=None):
+def check_missed_migrations(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('directories', nargs='*', help="")
 
@@ -18,8 +18,8 @@ def main(argv=None):
 
     for target in dirs:
         migration_dirs = list(filter(None, cmd_output("find", target,
-                                    "-type", "d",
-                                    "-name", "migrations").split("\n")))
+                                                      "-type", "d",
+                                                      "-name", "migrations").split("\n")))
         output = cmd_output("git", "ls-files", "--others", "--exclude-standard", *migration_dirs)
         if output:
             ret = 1
@@ -29,4 +29,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    exit(main())
+    exit(check_missed_migrations())

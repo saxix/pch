@@ -21,9 +21,9 @@ setup(
     install_requires=['cfgv', 'pre-commit'],
     entry_points={
         'console_scripts': [
-            'check-missed-migrations = pch.check_missed_migrations:main',
-            'check-untracked = pch.check_untracked:main',
-            'check-env-template = pch.check_env_template:main',
+            'check-missed-migrations = pch.check_missed_migrations:check_missed_migrations',
+            'check-untracked = pch.check_untracked:check_untracked',
+            'check-env-template = pch.check_env_template:check_env_template',
         ],
     },
 )

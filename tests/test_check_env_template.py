@@ -1,6 +1,6 @@
 import pytest
 
-from pch.check_env_template import main as check_env_template
+from pch.check_env_template import check_env_template
 from testing_utils import get_resource_path
 
 

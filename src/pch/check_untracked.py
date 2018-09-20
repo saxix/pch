@@ -1,10 +1,10 @@
 import argparse
 import os
 
-from .utils import cmd_output, RexList
+from .utils import RexList, cmd_output
 
 
-def main(argv=None):
+def check_untracked(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('directories', nargs='*', help="")
     parser.add_argument('--ignore', action='append', help="")
@@ -31,4 +31,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    exit(main())
+    exit(check_untracked())
