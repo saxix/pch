@@ -23,3 +23,10 @@ Add this to your `.pre-commit-config.yaml`
 - `check-env-template` - Check any entry in `.env` is pesent in `env.tpl`
     - Useful to keep in the source repository a template 
     for your `.env`     
+
+### As a standalone package
+
+If you'd like to use these hooks, they're also available as a standalone
+package.
+
+Simply `pip install pch`

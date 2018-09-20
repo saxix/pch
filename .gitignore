@@ -1,3 +1,6 @@
 .venv
 .local
 *.egg-info
+Pipfile.lock
+dist
+.*

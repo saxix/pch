@@ -2,7 +2,7 @@ import argparse
 import os
 from pathlib import Path
 
-from pch.utils import RexList
+from .utils import RexList
 
 
 def is_key(line):
@@ -28,23 +28,23 @@ def main(argv=None):
 
     args = parser.parse_args(argv)
 
-    if os.path.isfile(args.envfile):
-        c1 = Path(args.envfile).read_text()
-        c2 = Path(args.template).read_text()
-        ignored = RexList(args.ignore or [])
-        k1 = get_keys(c1, ignored)
-        k2 = get_keys(c2, ignored)
+    # if os.path.isfile(args.envfile):
+    c1 = Path(args.envfile).read_text()
+    c2 = Path(args.template).read_text()
+    ignored = RexList(args.ignore or [])
+    k1 = get_keys(c1, ignored)
+    k2 = get_keys(c2, ignored)
 
-        missing = k1 - k2
-        aliens = k2 - k1
-        if missing or aliens:
-            print("Template `{}` does not match `{}` file".format(args.template, args.envfile))
-            if missing:
-                print("  Missing entries:", ", ".join(missing))
+    missing = k1 - k2
+    aliens = k2 - k1
+    if missing or aliens:
+        print("Template `{}` does not match `{}` file".format(args.template, args.envfile))
+        if missing:
+            print("  Missing entries:", ", ".join(missing))
 
-            if aliens:
-                print("  Unknown entries:", ", ".join(missing))
+        if aliens:
+            print("  Unknown entries:", ", ".join(aliens))
 
-            return 1
+        return 1
 
-    return 1
+    return 0

@@ -16,7 +16,8 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
 
-    packages=find_packages(exclude=('tests*', 'testing*')),
+    package_dir={'': 'src'},
+    packages=find_packages(where='src'),
     install_requires=['cfgv', 'pre-commit'],
     entry_points={
         'console_scripts': [

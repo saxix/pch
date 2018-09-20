@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from pch.utils import cmd_output, RexList
+from .utils import cmd_output
 
 
 def main(argv=None):
