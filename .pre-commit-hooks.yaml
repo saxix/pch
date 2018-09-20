@@ -1,0 +1,30 @@
+-   id: dump-version
+    name: dump-version
+    description: dump git commit to file
+    entry: dump-version
+    language: python
+
+-   id: check-missed-migrations
+    name: check-missed-migrations
+    description: check for untracked django migrations
+    entry: check-missed-migrations
+    language: python
+    pass_filenames: false
+    always_run: true
+
+-   id: check-untracked
+    name: check-untracked
+    description: check for untracked files
+    entry: check-untracked
+    language: python
+    pass_filenames: false
+    always_run: true
+    minimum_pre_commit_version: 0.15.0
+
+-   id: check-env-template
+    name: check-env-template
+    description: check .env.tpl based on the content of .env file
+    entry: check-env-template
+    language: python
+    pass_filenames: false
+    always_run: true
