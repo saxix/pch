@@ -12,8 +12,12 @@ def check_version_release_match(argv=None):
 
     if is_release(args.releases):
         pkg = __import__(args.package)
+        pkg_version = getattr(pkg, args.version_attr)
         release = get_release()
-        return int(release != getattr(pkg, args.version_attr))
+        if int(release != pkg_version):
+            print("Package version '{}' and branch nane '{}' do not match".format(pkg_version,
+                                                                              release))
+            return 1
     return 0
 
 
