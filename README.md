@@ -23,6 +23,7 @@ Add this to your `.pre-commit-config.yaml`
 - `check-env-template` - Check any entry in `.env` is pesent in `env.tpl`
     - Useful to keep in the source repository a template 
     for your `.env`     
+- `check-forbidden` - Check filses for forbidden patterns
 
 ### As a standalone package
 
