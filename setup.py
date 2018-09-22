@@ -25,6 +25,7 @@ setup(
             'check-untracked = pch.check_untracked:check_untracked',
             'check-env-template = pch.check_env_template:check_env_template',
             'check-version-release-match = pch.check_version_release_match:check_version_release_match',
+            'check-forbidden = pch.check_forbidden:check_forbidden',
         ],
     },
 )
