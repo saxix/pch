@@ -36,3 +36,11 @@
     language: python
     pass_filenames: false
     always_run: true
+
+-   id: check-forbidden
+    name: check-forbidden
+    description: check for forbidden patterns
+    entry: check-forbidden
+    language: python
+    pass_filenames: true
+    always_run: true
