@@ -21,7 +21,7 @@ def compile(perl_pattern):
         if opt == 's':
             options += re.DOTALL
 
-    return re.compile(pattern, options)
+    return re.compile(f'({pattern}.*)', options)
 
 
 def check_forbidden(argv=None):
@@ -34,8 +34,9 @@ def check_forbidden(argv=None):
     for filename in args.filenames:
         content = Path(filename).read_text()
         for rex in targets:
-            if rex.search(content):
-                print(f"{filename} contains forbidden match '{rex.pattern}'")
+            m = rex.search(content)
+            if m:
+                print(f"{filename} contains forbidden match '{rex.pattern}': `{m.group(0)}`")
                 return 1
     return 0
 
