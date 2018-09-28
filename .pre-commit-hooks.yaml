@@ -44,3 +44,11 @@
     language: python
     pass_filenames: true
     always_run: true
+
+-   id: sort-imports
+    name: sort-imports
+    description: sort imports usig isort
+    entry: sort-imports
+    language: python
+    pass_filenames: true
+    always_run: false

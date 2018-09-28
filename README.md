@@ -24,6 +24,8 @@ Add this to your `.pre-commit-config.yaml`
     - Useful to keep in the source repository a template 
     for your `.env`     
 - `check-forbidden` - Check filses for forbidden patterns
+- `sort-imports` - Sort python imports using [isort](https://github.com/timothycrosley/isort)
+
 
 ### As a standalone package
 

@@ -18,7 +18,7 @@ setup(
 
     package_dir={'': 'src'},
     packages=find_packages(where='src'),
-    install_requires=['cfgv', 'pre-commit'],
+    install_requires=['cfgv', 'pre-commit', 'isort'],
     entry_points={
         'console_scripts': [
             'check-missed-migrations = pch.check_missed_migrations:check_missed_migrations',
@@ -26,6 +26,7 @@ setup(
             'check-env-template = pch.check_env_template:check_env_template',
             'check-version-release-match = pch.check_version_release_match:check_version_release_match',
             'check-forbidden = pch.check_forbidden:check_forbidden',
+            'sort-imports = pch.sort_imports:sort_imports',
         ],
     },
 )
