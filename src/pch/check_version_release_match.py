@@ -28,8 +28,16 @@ def check_version_release_match(argv=None):
     if is_release(args.releases):
         sys.path.append(os.path.abspath(args.pythonpath))
         pkg = __import__(args.package)
-        pkg_version = Version(getattr(pkg, args.version_attr))
-        release = Version(get_release())
+        try:
+            pkg_version = Version(getattr(pkg, args.version_attr))
+        except ValueError as e:
+            print(f"Package {args.package} has an invalid version number: {e}")
+            return 1
+        try:
+            release = Version(get_release())
+        except ValueError as e:
+            print(f"Branch has an invalid version number: {e}")
+            return 1
 
         if release != pkg_version:
             print("Package version '{}' and branch name '{}' do not match".format(pkg_version,
