@@ -6,7 +6,7 @@ from .utils import is_release, get_release
 from distutils.version import LooseVersion, StrictVersion
 
 
-def check_version_release_match(argv=None):
+def check_release(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--package', help="")
     parser.add_argument('--pythonpath', default='.', help="")
@@ -40,9 +40,10 @@ def check_version_release_match(argv=None):
             return 1
 
         if release != pkg_version:
-            print("Package version '{}' and branch name '{}' do not match".format(pkg_version,                                                                                  release))
+            print("Package version '{}' and branch name '{}' do not match".format(pkg_version,
+                                                                                  release))
             return 1
-    return 0
+    return 1
 
 
 if __name__ == '__main__':

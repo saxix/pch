@@ -10,6 +10,7 @@ pytest = "*"
 pre-commit = "*"
 ipython = "*"
 pdbpp = "*"
-
+isort = "*"
+"check-manifest" = "*"
 [requires]
 python_version = "3.6"

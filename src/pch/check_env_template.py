@@ -43,7 +43,6 @@ def check_env_template(argv=None):
 
         if aliens:
             print("  Unknown entries:", ", ".join(aliens))
-
         return 1
 
     return 0

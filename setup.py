@@ -26,6 +26,7 @@ setup(
             'check-env-template = pch.check_env_template:check_env_template',
             'check-version-release-match = pch.check_version_release_match:check_version_release_match',
             'check-forbidden = pch.check_forbidden:check_forbidden',
+            'check-release = pch.check_release:check_release',
             'sort-imports = pch.sort_imports:sort_imports',
         ],
     },
