@@ -1,6 +1,7 @@
 import re
 
 import argparse
+import sys
 from pathlib import Path
 
 from .utils import is_release, get_release, RexList
@@ -28,9 +29,20 @@ def check_forbidden(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*', help="")
     parser.add_argument('-p', '--pattern', action="append")
+    parser.add_argument('-f', '--file', action="store")
     args = parser.parse_args(argv)
+    rules = args.pattern or []
+    targets = RexList([compile(p) for p in rules])
+    if args.file:
+        with Path(args.file).open() as f:
+            for i, line in enumerate(f.readlines()):
+                try:
+                    targets.append(line[:-1])
+                except Exception as e:
+                    print(f"Error processing {args.file} at line {i}")
+                    print(f"Cannot add regex: {e}")
+                    sys.exit(1)
 
-    targets = RexList([compile(p) for p in args.pattern])
     for filename in args.filenames:
         content = Path(filename).read_text()
         for rex in targets:
