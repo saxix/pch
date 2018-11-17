@@ -2,6 +2,7 @@ import re
 
 import argparse
 import sys
+import os
 from pathlib import Path
 
 from .utils import is_release, get_release, RexList
@@ -33,24 +34,41 @@ def check_forbidden(argv=None):
     args = parser.parse_args(argv)
     rules = args.pattern or []
     targets = RexList([compile(p) for p in rules])
-    if args.file:
-        with Path(args.file).open() as f:
-            for i, line in enumerate(f.readlines()):
-                try:
-                    targets.append(line[:-1])
-                except Exception as e:
-                    print(f"Error processing {args.file} at line {i}")
-                    print(f"Cannot add regex: {e}")
-                    sys.exit(1)
 
+    print(Path(os.curdir).absolute())
+    if args.file:
+        try:
+            with Path(args.file).open("r") as f:
+                for i, line in enumerate(f.readlines()):
+                    try:
+                        pattern = line.strip()[:-1]
+                        if pattern:
+                            targets.append(pattern)
+                    except Exception as e:
+                        print(f"Error processing {args.file} at line {i}")
+                        print(f"Cannot add regex: {e}")
+                        sys.exit(1)
+        except FileNotFoundError as e:
+            print(f"check-forbidden: {args.file} does not exists. Check your '.pre-commit-config.yaml'")
+            return 1
+
+    return_code = 0
     for filename in args.filenames:
-        content = Path(filename).read_text()
-        for rex in targets:
-            m = rex.search(content)
-            if m:
-                print(f"{filename} contains forbidden match '{rex.pattern}': `{m.group(0)}`")
-                return 1
-    return 0
+        if args and filename == args.file:
+            continue
+        try:
+            content = Path(filename).read_text()
+            for rex in targets:
+                m = rex.search(content)
+                if m:
+                    print(f"{filename} contains forbidden match '{rex.pattern}': `{m.group(0)}`")
+                    return_code = 1
+        except UnicodeDecodeError:
+            pass
+        except Exception as e:
+            print(f"Error reading {Path(filename).absolute()}: {e}")
+            return_code = 1
+    return return_code
 
 
 if __name__ == '__main__':
