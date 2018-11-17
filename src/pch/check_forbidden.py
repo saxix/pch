@@ -41,7 +41,7 @@ def check_forbidden(argv=None):
             with Path(args.file).open("r") as f:
                 for i, line in enumerate(f.readlines()):
                     try:
-                        pattern = line.strip()[:-1]
+                        pattern = line[:-1]
                         if pattern:
                             targets.append(pattern)
                     except Exception as e:
@@ -54,7 +54,7 @@ def check_forbidden(argv=None):
 
     return_code = 0
     for filename in args.filenames:
-        if args and filename == args.file:
+        if args and filename == args.file or filename == '.pre-commit-config.yaml':
             continue
         try:
             content = Path(filename).read_text()
