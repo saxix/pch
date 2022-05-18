@@ -14,7 +14,6 @@ def cmd_output(*cmd, **kwargs):
         stderr = stderr.decode('UTF-8')
     if retcode is not None and proc.returncode != retcode:
         raise subprocess.CalledProcessError(retcode, cmd, stdout, stderr)
-        # raise subprocess.CalledProcessError(cmd, retcode, proc.returncode, stdout, stderr)
     return stdout
 
 
