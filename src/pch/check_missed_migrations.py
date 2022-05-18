@@ -20,10 +20,11 @@ def check_missed_migrations(argv=None):
         migration_dirs = list(filter(None, cmd_output("find", target,
                                                       "-type", "d",
                                                       "-name", "migrations").split("\n")))
-        output = cmd_output("git", "ls-files", "--others", "--exclude-standard", *migration_dirs)
-        if output:
-            ret = 1
-            print(output)
+        if migration_dirs:
+            output = cmd_output("git", "ls-files", "--others", "--exclude-standard", *migration_dirs)
+            if output:
+                ret = 1
+                print(output)
 
     return ret
 
