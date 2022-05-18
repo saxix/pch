@@ -1,8 +1,8 @@
--   id: dump-version
-    name: dump-version
-    description: dump git commit to file
-    entry: dump-version
-    language: python
+#-   id: dump-version
+#    name: dump-version
+#    description: dump git commit to file
+#    entry: dump-version
+#    language: python
 
 -   id: check-missed-migrations
     name: check-missed-migrations
@@ -45,10 +45,10 @@
     pass_filenames: true
     always_run: true
 
--   id: sort-imports
-    name: sort-imports
-    description: sort imports usig isort
-    entry: sort-imports
-    language: python
-    pass_filenames: true
-    always_run: false
+#-   id: sort-imports
+#    name: sort-imports
+#    description: sort imports usig isort
+#    entry: sort-imports
+#    language: python
+#    pass_filenames: true
+#    always_run: false

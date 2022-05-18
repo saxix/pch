@@ -1,13 +1,14 @@
 # refs/heads/release/1.0b
+from subprocess import CalledProcessError
 from unittest import mock
 
 import pytest
 
-from pch.utils import get_current_branch, is_release
+from pch.utils import get_current_branch, is_release,cmd_output
 
 
 @pytest.mark.parametrize('branch,expected', [('refs/heads/release/1.0b', True),
-                                    ('refs/heads/develop', False)])
+                                             ('refs/heads/develop', False)])
 def test_is_release(branch, expected):
     with mock.patch('pch.utils.cmd_output', lambda *a: branch):
         assert is_release() is expected
@@ -18,3 +19,13 @@ def test_get_current_branch(branch):
     with mock.patch('pch.utils.cmd_output', lambda *a: branch):
         branch = get_current_branch()
     assert branch
+
+
+@pytest.mark.parametrize('cmd,retcode', [('ls', 0),])
+def test_cmd_output(cmd, retcode):
+    assert cmd_output(cmd, retcode=retcode)
+
+
+def test_cmd_output_fail():
+    with pytest.raises(CalledProcessError):
+        assert cmd_output('ls', retcode='99')
