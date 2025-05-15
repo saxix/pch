@@ -6,3 +6,4 @@ dist
 src/pch/version.py
 
 !.github
+!.pre-commit-config.yaml
