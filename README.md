@@ -1,5 +1,9 @@
-pch
-===
+# pch
+
+
+[![Pypi](https://badge.fury.io/py/pch.svg)](https://badge.fury.io/py/pch)
+[![coverage](https://codecov.io/github/saxix/pch/coverage.svg?branch=develop)](https://codecov.io/github/saxix/pch?branch=develop)
+[![Test](https://github.com/saxix/pch/actions/workflows/test.yml/badge.svg)](https://github.com/saxix/pch/actions/workflows/test.yml)
 
 Some hooks for pre-commit.
 
@@ -19,12 +23,8 @@ Add this to your `.pre-commit-config.yaml`
 ### Hooks available
 
 - `check-untracked` - Prevent missing files in commit
-- `check-missed-migrations` - As `check-untracked` but spcific for Django migrations
-- `check-env-template` - Check any entry in `.env` is pesent in `env.tpl`
-    - Useful to keep in the source repository a template 
-    for your `.env`     
+- `check-missed-migrations` - As `check-untracked` but specific for Django migrations
 - `check-forbidden` - Check filses for forbidden patterns
-- `sort-imports` - Sort python imports using [isort](https://github.com/timothycrosley/isort)
 
 
 ### As a standalone package
@@ -33,3 +33,5 @@ If you'd like to use these hooks, they're also available as a standalone
 package.
 
 Simply `pip install pch`
+
+### Exampled in .pre-commit-hooks.yaml

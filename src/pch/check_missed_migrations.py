@@ -1,12 +1,16 @@
+from __future__ import annotations
+
 import argparse
 import os
+import sys
+from typing import Any
 
 from .utils import cmd_output
 
 
-def check_missed_migrations(argv=None):
+def check_missed_migrations(argv: Any | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument('directories', nargs='*', help="")
+    parser.add_argument("directories", nargs="*", help="")
 
     args = parser.parse_args(argv)
     dirs = args.directories
@@ -17,17 +21,15 @@ def check_missed_migrations(argv=None):
     dirs = list(map(os.path.realpath, dirs))
 
     for target in dirs:
-        migration_dirs = list(filter(None, cmd_output("find", target,
-                                                      "-type", "d",
-                                                      "-name", "migrations").split("\n")))
+        migration_dirs = list(filter(None, cmd_output("find", target, "-type", "d", "-name", "migrations").split("\n")))
         if migration_dirs:
             output = cmd_output("git", "ls-files", "--others", "--exclude-standard", *migration_dirs)
             if output:
                 ret = 1
-                print(output)
+                sys.stdout.write(f"{output}\n")
 
     return ret
 
 
-if __name__ == '__main__':
-    exit(check_missed_migrations())
+if __name__ == "__main__":
+    sys.exit(check_missed_migrations())

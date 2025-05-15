@@ -1,53 +1,41 @@
+from __future__ import annotations
+
 import re
-import sre_constants
 import subprocess
+from enum import Enum
+from typing import Any
 
 
-def cmd_output(*cmd, **kwargs):
-    retcode = kwargs.pop('retcode', 0)
-    popen_kwargs = {'stdout': subprocess.PIPE, 'stderr': subprocess.PIPE}
+class Color(str, Enum):
+    BOLD = "\033[1m"
+    UNDER = "\033[4m"
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    NORMAL = "\033[0m"
+    DIM = "\033[2m"
+
+    def __str__(self) -> str:
+        return self.value
+
+
+def cmd_output(*cmd: str, **kwargs: Any) -> str:
+    retcode = kwargs.pop("retcode", 0)
+    popen_kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.PIPE}
     popen_kwargs.update(kwargs)
-    proc = subprocess.Popen(cmd, **popen_kwargs)
+    proc = subprocess.Popen(cmd, **popen_kwargs)  # type: ignore[call-overload] # noqa: S603
     stdout, stderr = proc.communicate()
-    stdout = stdout.decode('UTF-8')
+    stdout = stdout.decode("UTF-8")
     if stderr is not None:
-        stderr = stderr.decode('UTF-8')
+        stderr = stderr.decode("UTF-8")
     if retcode is not None and proc.returncode != retcode:
         raise subprocess.CalledProcessError(retcode, cmd, stdout, stderr)
     return stdout
 
 
-def is_release(prefix='release'):
-    try:
-        branch = get_current_branch()
-    except subprocess.CalledProcessError:
-        return False
-    chunks = branch.strip().split('/')
-    return prefix in chunks
-
-
-def get_release():
-    try:
-        branch = get_current_branch()
-    except subprocess.CalledProcessError:
-        return False
-    chunks = branch.strip().split('/')
-    return chunks[-1]
-
-
-
-def get_current_branch():
-    try:
-        branch = cmd_output('git', 'symbolic-ref', 'HEAD')
-    except subprocess.CalledProcessError:
-        return False
-    chunks = branch.strip().split('/')
-    return '/'.join(chunks[2:])
-
-
 class RexList(list):
-    """
-        list class where each entry is a valid regular expression
+    """list class where each entry is a valid regular expression.
 
     >>> r = RexList(["a.*"])
     >>> r.append("[0-9]*")
@@ -77,31 +65,35 @@ class RexList(list):
     ValueError: [0- is not a valid regular expression
     """
 
-    def __init__(self, seq=None):
+    def __init__(self, seq: list[str | re.Pattern] | None = None) -> None:
         regexx = []
         if seq:
             for el in seq:
-                regexx.append(self._compile(el))
-        super(RexList, self).__init__(regexx)
+                if isinstance(el, re.Pattern):
+                    regexx.append(el)
+                else:
+                    re.compile(self._compile(el))
 
-    def __repr__(self):
+        super().__init__(regexx)
+
+    def __repr__(self) -> str:
         return str([r.pattern for r in self])
 
-    def _compile(self, pattern, index=None):
+    def _compile(self, pattern: str) -> re.Pattern:
         try:
             return re.compile(pattern)
-        except (TypeError, re.error, sre_constants.error):
-            raise ValueError(str(pattern))
+        except (TypeError, re.error):
+            raise ValueError(str(pattern)) from None
 
-    def __setitem__(self, i, pattern):
+    def __setitem__(self, i: Any, pattern: Any) -> None:
         rex = self._compile(pattern)
-        super(RexList, self).__setitem__(i, rex)
+        super().__setitem__(i, rex)
 
-    def append(self, pattern):
+    def append(self, pattern: str) -> None:
         rex = self._compile(pattern)
-        super(RexList, self).append(rex)
+        super().append(rex)
 
-    def __contains__(self, target):
+    def __contains__(self, target: Any) -> bool:
         t = str(target)
         for rex in self:
             m = rex.match(t)
@@ -109,8 +101,8 @@ class RexList(list):
                 return True
         return False
 
-    def __rsub__(self, other):
-        if other:
-            if isinstance(other, (list, tuple)):
-                t = type(other)
-                return t([a for a in other if a not in self])
+    def __rsub__(self, other: Any) -> Any:
+        if other and isinstance(other, (list | tuple)):
+            t = type(other)
+            return t([a for a in other if a not in self])
+        return self

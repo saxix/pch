@@ -1,6 +1,8 @@
-.venv
-.local
-*.egg-info
-Pipfile.lock
-dist
 .*
+~*
+*.egg-info
+dist
+
+src/pch/version.py
+
+!.github

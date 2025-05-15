@@ -1,75 +1,112 @@
-import re
+from __future__ import annotations
 
 import argparse
+import fnmatch
+import re
 import sys
-import os
 from pathlib import Path
+from typing import Any, Generator
 
-from .utils import is_release, get_release, RexList
-from distutils.version import LooseVersion, StrictVersion
+from .utils import Color, RexList
 
 
-def compile(perl_pattern):
+def compile_re(perl_pattern: str) -> re.Pattern:
     separator = perl_pattern[0]
-    perl_pattern = perl_pattern.replace(r'\%s' % separator, chr(0))
+    perl_pattern = perl_pattern.replace(r"\%s" % separator, chr(0))
     __, pattern, perl_options = perl_pattern.split(separator)
     pattern = pattern.replace(chr(0), separator)
     options = 0
     for opt in perl_options:
-        if opt == 'i':
+        if opt == "i":
             options += re.IGNORECASE
-        if opt == 'm':
+        if opt == "m":
             options += re.MULTILINE
-        if opt == 's':
+        if opt == "s":
             options += re.DOTALL
 
-    return re.compile(f'({pattern}.*)', options)
+    return re.compile(f"({pattern}.*)", options)
 
 
-def check_forbidden(argv=None):
+def is_valid(filename: str | Path, include: list[str], exclude: list[str]) -> bool:
+    if not include and not exclude:
+        return True
+
+    if include and exclude:
+        return filename in exclude and filename not in exclude
+
+    if exclude:
+        return filename not in exclude
+
+    return filename in include
+
+
+def selector(bases: list[str], includes: list[str], excludes: list[str]) -> Generator[str, None, None]:
+    for filename in bases:
+        if Path(filename).is_file():
+            if is_valid(filename, includes, excludes):
+                yield filename
+        elif Path(filename).is_dir():
+            for entry in Path(filename).glob("*"):
+                if is_valid(entry, includes, excludes):
+                    yield str(entry)
+
+
+def check_forbidden(argv: Any | None = None) -> int:  # noqa: PLR0912, C901
     parser = argparse.ArgumentParser()
-    parser.add_argument('filenames', nargs='*', help="")
-    parser.add_argument('-p', '--pattern', action="append")
-    parser.add_argument('-f', '--file', action="store")
+    parser.add_argument("filenames", nargs="*", help="")
+    parser.add_argument("-p", "--pattern", action="append")
+    parser.add_argument("-c", "--config", action="store")
+    parser.add_argument("-e", "--exclude", nargs="*", action="store")
+    parser.add_argument("-i", "--include", nargs="*", action="store")
+    parser.add_argument("-v", "--verbosity", default=0, action="store", type=int)
     args = parser.parse_args(argv)
-    rules = args.pattern or []
-    targets = RexList([compile(p) for p in rules])
+    rules = RexList([compile_re(p) for p in args.pattern or []])
+    includes = RexList([fnmatch.translate(e) for e in args.include]) if args.include else []
+    excludes = RexList([fnmatch.translate(e) for e in args.exclude]) if args.exclude else []
+    targets: list[str] = []
+    verbosity = int(args.verbosity)
 
-    print(Path(os.curdir).absolute())
-    if args.file:
+    if args.config:
         try:
-            with Path(args.file).open("r") as f:
+            with Path(args.config).open("r") as f:
                 for i, line in enumerate(f.readlines()):
                     try:
                         pattern = line[:-1]
                         if pattern:
                             targets.append(pattern)
-                    except Exception as e:
-                        print(f"Error processing {args.file} at line {i}")
-                        print(f"Cannot add regex: {e}")
+                    except re.PatternError as e:
+                        sys.stdout.write(f"Error processing {args.config} at line {i}\n")
+                        sys.stdout.write(f"Cannot add regex: {e}\n")
                         sys.exit(1)
-        except FileNotFoundError as e:
-            print(f"check-forbidden: {args.file} does not exists. Check your '.pre-commit-config.yaml'")
+        except FileNotFoundError:
+            sys.stdout.write(f"check-forbidden: {args.config} does not exists.\n")
             return 1
+    else:
+        targets = args.filenames
+    if verbosity > 2:
+        sys.stdout.write(f"{Color.BLUE + Color.BOLD}Processing: {targets}{Color.NORMAL}\n")
 
     return_code = 0
-    for filename in args.filenames:
-        if args and filename == args.file or filename == '.pre-commit-config.yaml':
-            continue
+    for filename in selector(targets, includes, excludes):
+        if verbosity > 1:
+            sys.stdout.write(f"{Color.BLUE + Color.BOLD}Processing: {filename}{Color.NORMAL}\n")
         try:
             content = Path(filename).read_text()
-            for rex in targets:
-                m = rex.search(content)
-                if m:
-                    print(f"{filename} contains forbidden match '{rex.pattern}': `{m.group(0)}`")
+            for rex in rules:
+                if m := rex.search(content):
+                    sys.stdout.write(
+                        f"{Color.NORMAL}{filename}: "
+                        f"{Color.YELLOW}contains forbidden match '{rex.pattern}': "
+                        f"{Color.RED}`{m.group(0)}`\n"
+                    )
                     return_code = 1
         except UnicodeDecodeError:
             pass
-        except Exception as e:
-            print(f"Error reading {Path(filename).absolute()}: {e}")
+        except OSError as e:
+            sys.stderr.write(f"Error reading {Path(filename).absolute()}: {e}\n")
             return_code = 1
     return return_code
 
 
-if __name__ == '__main__':
-    exit(check_forbidden())
+if __name__ == "__main__":
+    sys.exit(check_forbidden())

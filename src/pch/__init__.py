@@ -1,2 +1,3 @@
-# -*- coding: utf-8 -*-
-__version__ = VERSION = '1.0'
+from .version import __version__
+
+VERSION = __version__

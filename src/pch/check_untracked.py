@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import argparse
 import os
+import sys
+from typing import Any
 
 from .utils import RexList, cmd_output
 
 
-def check_untracked(argv=None):
+def check_untracked(argv: Any | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument('directories', nargs='*', help="")
-    parser.add_argument('--ignore', action='append', help="")
+    parser.add_argument("directories", nargs="*", help="")
+    parser.add_argument("--ignore", action="append", help="")
 
     args = parser.parse_args(argv)
     dirs = args.directories
@@ -25,10 +29,10 @@ def check_untracked(argv=None):
         results = output.split("\n")
         filenames = results - ignored
         if filenames:
-            print("\n".join(filenames))
+            sys.stdout.write("\n".join(filenames))
             return 1
     return 0
 
 
-if __name__ == '__main__':
-    exit(check_untracked())
+if __name__ == "__main__":
+    sys.exit(check_untracked())
