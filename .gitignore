@@ -7,3 +7,4 @@ src/pch/version.py
 
 !.github
 !.pre-commit-config.yaml
+!.pre-commit-hooks.yaml
