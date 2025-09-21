@@ -2,7 +2,7 @@
 ~*
 *.egg-info
 dist
-
+htmlcov
 src/pch/version.py
 
 !.github

@@ -23,8 +23,51 @@ Add this to your `.pre-commit-config.yaml`
 ### Hooks available
 
 - `check-untracked` - Prevent missing files in commit
+
+  Example:
+  ```yaml
+  -   repo: https://github.com/saxix/pch
+      rev: <tag>
+      hooks:
+      -   id: check-untracked
+  ```
+
 - `check-missed-migrations` - As `check-untracked` but specific for Django migrations
-- `check-forbidden` - Check filses for forbidden patterns
+
+  Example:
+  ```yaml
+  -   repo: https://github.com/saxix/pch
+      rev: <tag>
+      hooks:
+      -   id: check-missed-migrations
+  ```
+
+- `check-forbidden` - Check files for forbidden patterns
+
+  Example:
+  ```yaml
+  -   repo: https://github.com/saxix/pch
+      rev: <tag>
+      hooks:
+      -   id: check-forbidden
+          args: ["--pattern", "/import pdb/i"]
+  ```
+
+- `check-bash-command` - Run a bash command on files.
+
+  Example:
+  ```yaml
+  - repo: local
+    hooks:
+      - id: check-run-command
+        name: check-run-command
+        entry: check-run-command
+        language: python
+        pass_filenames: true
+        files: \.py$
+        exclude: ^setup\.py$
+        args: [ "pylint" ]
+  ```
 
 
 ### As a standalone package

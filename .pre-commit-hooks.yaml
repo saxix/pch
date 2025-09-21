@@ -1,3 +1,10 @@
+-   id: check-run-command
+    name: check-bash-command
+    description: run shell command
+    entry: check-run-command
+    language: python
+    pass_filenames: true
+
 -   id: check-missed-migrations
     name: check-missed-migrations
     description: check for untracked django migrations
