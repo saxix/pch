@@ -1,5 +1,5 @@
 -   id: check-run-command
-    name: check-bash-command
+    name: check-run-command
     description: run shell command
     entry: check-run-command
     language: python
