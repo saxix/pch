@@ -55,7 +55,16 @@ Add this to your `.pre-commit-config.yaml`
       rev: v1.4.0
       hooks:
       -   id: check-forbidden
-          args: ["--pattern", "/import pdb/i"]
+          args: 
+            - -pattern
+            - /import pdb/i
+
+      -   id: check-forbidden
+          files: pyproject.toml
+          args: 
+            - -pattern
+            - '/\[tool\.uv\.sources\]\s/s'
+          
   ```
 
   Example with a `ini` file:

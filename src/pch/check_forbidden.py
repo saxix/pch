@@ -7,7 +7,13 @@ import sys
 from pathlib import Path
 from typing import Any, Generator
 
-from .utils import Color, RexList
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from pch.utils import Color, RexList
+
+
+def clean(s):
+    return s.replace("\n", "")
 
 
 def compile_re(perl_pattern: str) -> re.Pattern:
@@ -24,7 +30,7 @@ def compile_re(perl_pattern: str) -> re.Pattern:
         if opt == "s":
             options += re.DOTALL
 
-    return re.compile(f"({pattern}.*)", options)
+    return re.compile(f"{pattern}", options)
 
 
 def is_valid(filename: str | Path, include: list[str], exclude: list[str]) -> bool:
@@ -98,7 +104,7 @@ def check_forbidden(argv: Any | None = None) -> int:  # noqa: PLR0912, C901
                     sys.stdout.write(
                         f"{Color.NORMAL}{filename}: "
                         f"{Color.YELLOW}contains forbidden match '{rex.pattern}': "
-                        f"{Color.RED}`{m.group(0)}`\n"
+                        f"{Color.RED}`{clean(m.group(0))}`\n"
                     )
                     return_code = 1
         except UnicodeDecodeError:
