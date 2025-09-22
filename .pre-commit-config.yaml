@@ -27,15 +27,4 @@ repos:
     hooks:
       - id: ruff-format
       - id: ruff
-        args: [ "--fix", "--unsafe-fixes", "--exit-non-zero-on-fix" ]
-
-  - repo: local
-    hooks:
-      - id: check-run-command
-        name: check-run-command
-        entry: check-run-command
-        language: python
-        pass_filenames: true
-        files: .xx$
-        exclude: ^setup\.py$
-        args: [ "echo" ]
+        args: [ "--fix", "--unsafe-fixes", "--exit-non-zero-on-fix"]

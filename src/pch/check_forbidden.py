@@ -52,13 +52,14 @@ def selector(bases: list[str], includes: list[str], excludes: list[str]) -> Gene
 
 
 def check_forbidden(argv: Any | None = None) -> int:  # noqa: PLR0912, C901
+    """Check source code for forbidden text."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("filenames", nargs="*", help="")
-    parser.add_argument("-p", "--pattern", action="append")
-    parser.add_argument("-c", "--config", action="store")
-    parser.add_argument("-e", "--exclude", nargs="*", action="store")
-    parser.add_argument("-i", "--include", nargs="*", action="store")
-    parser.add_argument("-v", "--verbosity", default=0, action="store", type=int)
+    parser.add_argument("filenames", nargs="*", help="list of filenames to check")
+    parser.add_argument("-p", "--pattern", action="append", help="regex pattern to check")
+    parser.add_argument("-c", "--config", action="store", help="path to config file")
+    parser.add_argument("-e", "--exclude", nargs="*", action="store", help="list of filenames to exclude")
+    parser.add_argument("-i", "--include", nargs="*", action="store", help="list of filenames to include")
+    parser.add_argument("-v", "--verbosity", default=0, action="store", type=int, help="verbosity level")
     args = parser.parse_args(argv)
     rules = RexList([compile_re(p) for p in args.pattern or []])
     includes = RexList([fnmatch.translate(e) for e in args.include]) if args.include else []

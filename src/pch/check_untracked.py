@@ -9,6 +9,7 @@ from .utils import RexList, cmd_output
 
 
 def check_untracked(argv: Any | None = None) -> int:
+    """Check if there are unwanted untracked files."""
     parser = argparse.ArgumentParser()
     parser.add_argument("directories", nargs="*", help="")
     parser.add_argument("--ignore", action="append", help="")

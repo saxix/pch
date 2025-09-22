@@ -9,6 +9,7 @@ from .utils import cmd_output
 
 
 def check_missed_migrations(argv: Any | None = None) -> int:
+    """Check all django Django migrations are added to git."""
     parser = argparse.ArgumentParser()
     parser.add_argument("directories", nargs="*", help="")
 

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import re
+import shutil
 import subprocess
 from enum import Enum
+from pathlib import Path
 from typing import Any
 
 
@@ -72,8 +74,7 @@ class RexList(list):
                 if isinstance(el, re.Pattern):
                     regexx.append(el)
                 else:
-                    re.compile(self._compile(el))
-
+                    regexx.append(re.compile(self._compile(el)))
         super().__init__(regexx)
 
     def __repr__(self) -> str:
@@ -106,3 +107,38 @@ class RexList(list):
             t = type(other)
             return t([a for a in other if a not in self])
         return self
+
+
+def safe_path(p: Path | str, base: Path | None = None) -> Path:
+    base = Path.cwd() if base is None else Path(base)
+    # Ensure 'p' is inside 'base' (prevent path traversal)
+    return Path(p).resolve().relative_to(base.resolve())
+
+
+def is_git_tracked(path: Path) -> bool:
+    git = shutil.which("git")
+    if git is None:
+        raise RuntimeError("git executable not found in PATH")
+
+    try:
+        subprocess.run(  # noqa: S603
+            [git, "ls-files", "--error-unmatch", str(safe_path(path))],
+            capture_output=True,  # UP022 compliant
+            check=True,
+        )
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+def is_git_ignored(path: Path) -> bool:
+    git = shutil.which("git")
+    if git is None:
+        raise RuntimeError("git executable not found in PATH")
+
+    result = subprocess.run(  # noqa: S603
+        [git, "check-ignore", str(safe_path(path))],
+        capture_output=True,  # UP022 compliant
+        check=False,  # we don’t want exceptions here
+    )
+    return result.returncode == 0

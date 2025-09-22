@@ -30,3 +30,19 @@
     language: python
     pass_filenames: true
     always_run: true
+
+-   id: check-minimized
+    name: check-minimized
+    description: check minimized version of *.js file is updated
+    entry: check-minimized
+    language: python
+    pass_filenames: true
+    always_run: true
+
+-   id: check-tailwind
+    name: check-tailwind
+    description: check django-tailwind production version
+    entry: check-tailwind
+    language: python
+    pass_filenames: true
+    always_run: true
