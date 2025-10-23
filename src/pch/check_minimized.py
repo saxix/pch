@@ -32,7 +32,7 @@ def check_minimized(argv: Sequence[str] | None = None) -> int:  # noqa: C901 PLR
                 if args.verbosity >= 2:
                     sys.stdout.write(f"File {filename} does not exist\n")
                 continue
-            if filename in args.ignore:
+            if args.ignore and filename in args.ignore:
                 if args.verbosity >= 2:
                     sys.stdout.write(f"Ignoring {filename}\n")
                 continue
