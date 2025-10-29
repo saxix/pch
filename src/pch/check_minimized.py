@@ -19,6 +19,7 @@ def check_minimized(argv: Sequence[str] | None = None) -> int:  # noqa: C901 PLR
     parser.add_argument("-v", "--verbosity", action="count", default=0, help="Verbosity level.")
 
     args = parser.parse_args(argv)
+    ignored: Sequence[str]
     if args.ignore:
         ignored = RexList([fnmatch.translate(e) for e in args.ignore] if args.ignore else [])
     else:
