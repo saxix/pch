@@ -12,7 +12,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from pch.utils import Color, RexList
 
 
-def clean(s):
+def clean(s: str) -> str:
     return s.replace("\n", "")
 
 

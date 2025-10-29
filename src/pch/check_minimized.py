@@ -21,6 +21,8 @@ def check_minimized(argv: Sequence[str] | None = None) -> int:  # noqa: C901 PLR
     args = parser.parse_args(argv)
     if args.ignore:
         ignored = RexList([fnmatch.translate(e) for e in args.ignore] if args.ignore else [])
+    else:
+        ignored = []
     if args.base:
         base = args.base
     else:
@@ -32,7 +34,7 @@ def check_minimized(argv: Sequence[str] | None = None) -> int:  # noqa: C901 PLR
                 if args.verbosity >= 2:
                     sys.stdout.write(f"File {filename} does not exist\n")
                 continue
-            if args.ignore and filename in args.ignore:
+            if filename in ignored:
                 if args.verbosity >= 2:
                     sys.stdout.write(f"Ignoring {filename}\n")
                 continue

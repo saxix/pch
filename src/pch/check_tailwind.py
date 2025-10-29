@@ -27,9 +27,9 @@ def check_tailwind(argv: Sequence[str] | None = None) -> int:
                 count += chunk.count(b"\n")
             if count > args.lines:
                 sys.stdout.write(
-                        f"{Color.RED + Color.BOLD}{dest.relative_to(base)}: "
-                        f"does not look like a production file.{Color.NORMAL}\n"
-                    )
+                    f"{Color.RED + Color.BOLD}{dest.relative_to(base)}: "
+                    f"does not look like a production file.{Color.NORMAL}\n"
+                )
                 return_code = 1
         if not is_git_tracked(dest):
             sys.stdout.write(f"{Color.RED + Color.BOLD}{dest.relative_to(base)}: is not git tracked.{Color.NORMAL}\n")
