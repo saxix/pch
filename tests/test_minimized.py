@@ -18,7 +18,7 @@ def test_verbosity_ok(capsys):
 
 
 def test_check_missing(capsys):
-    ret = check_minimized([str(JS_DIR / "missing.js"), "-vvvv"])
+    ret = check_minimized([str(JS_DIR / "missing.js"), "-vvvv", "--no-color"])
     captured = capsys.readouterr()
     assert ret == 1
-    assert "missing.js: minimized not found." in captured.out
+    assert "missing.js  minimized not found" in captured.err

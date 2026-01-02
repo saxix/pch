@@ -12,14 +12,32 @@ class Color(str, Enum):
     BOLD = "\033[1m"
     UNDER = "\033[4m"
     BLUE = "\033[94m"
-    GREEN = "\033[92m"
+    CYAN = "\033[96m"
+    GREEN = "\033[32m"
+    GREEN1 = "\033[92m"
     RED = "\033[91m"
+    RED1 = "\033[31m"
+    RED2 = "\033[91m\033[2m"
     YELLOW = "\033[93m"
+    YELLOW1 = "\033[33m"
     NORMAL = "\033[0m"
     DIM = "\033[2m"
 
     def __str__(self) -> str:
         return self.value
+
+
+ANSI_PATTERN = re.compile(r"\x1B\[\d+(;\d+){0,2}m")
+
+
+def nocolor(s: str) -> str:
+    return ANSI_PATTERN.sub("", s)
+
+
+def check_color(remove_colors: bool, value: str) -> str:
+    if remove_colors:
+        return ANSI_PATTERN.sub("", value)
+    return value
 
 
 def cmd_output(*cmd: str, **kwargs: Any) -> str:
