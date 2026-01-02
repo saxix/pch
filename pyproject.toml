@@ -38,6 +38,7 @@ scripts.check-untracked = "pch.check_untracked:check_untracked"
 [dependency-groups]
 dev = [
   "mypy>=1.14.1",
+  "pch",
   "pytest>=8.3.5",
   "pytest-coverage>=0",
   "ruff>=0.11.9",
@@ -85,3 +86,11 @@ packages = [
 
 [tool.uv]
 package = true
+
+[tool.uv.workspace]
+members = [
+  ".",
+]
+
+[tool.uv.sources]
+pch = { workspace = true }

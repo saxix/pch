@@ -340,6 +340,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "pch" },
     { name = "pytest" },
     { name = "pytest-coverage" },
     { name = "ruff" },
@@ -363,11 +364,12 @@ mypy = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pre-commit", specifier = ">=4.3.0" }]
+requires-dist = [{ name = "pre-commit", specifier = ">=4.3" }]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=1.14.1" },
+    { name = "pch", editable = "." },
     { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest-coverage", specifier = ">=0" },
     { name = "ruff", specifier = ">=0.11.9" },
